@@ -1,0 +1,1 @@
+Program that reads an executable and outputs its entropy, and gives some insight on whether the file has been packed or not.
