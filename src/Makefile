@@ -10,4 +10,4 @@ test.o: test.c reader.h
 reader.o: reader.c reader.h
 
 clean: $(wildcard *.out *.o)
-	rm -fv $^
+	rm -f $^

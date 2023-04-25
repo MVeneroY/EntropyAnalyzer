@@ -3,7 +3,7 @@
 
 #include "reader.h"
 
-// TODO: implement function to get the size of a file. Use to make buffer size dynamic.
+// TODO: implement function to get the size of a file. Use to make buffer size dynamic. (done)
 
 int main(int argc, char ** args) {
 
@@ -14,11 +14,22 @@ int main(int argc, char ** args) {
         printf("Error: couldn't open file\n");
         exit(1);
     }
-    readExecutable(fptr);
+
+    int bufferlen = getFileSize(fptr);
+
+    unsigned char * buffer = (unsigned char *) malloc(sizeof (unsigned char) * bufferlen);
+    if (buffer == NULL) {
+        printf("Error: couldn't allocate buffer\n");
+        exit(1);
+    }
+
+    readExecutable(fptr, buffer, bufferlen);
     fclose(fptr);
 
-    placeDataInBins();
-    getEntropy();
+    placeDataInBins(buffer, bufferlen);
+    getEntropy(bufferlen);
+
+    free(buffer);
 
     return 0;
 }
