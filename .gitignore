@@ -6,3 +6,6 @@
 
 # intermediate object files (?)
 *.o
+
+# samples
+samples*/
