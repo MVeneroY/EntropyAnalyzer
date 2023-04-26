@@ -9,5 +9,5 @@ a.out: test.o reader.o
 test.o: test.c reader.h
 reader.o: reader.c reader.h
 
-clean: $(wildcard *.out *.o)
-	rm -f $^
+clean: 
+	rm -f $(wildcard *.out *.o)
