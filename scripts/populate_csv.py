@@ -1,30 +1,35 @@
 #! /usr/local/bin/python3
+# populate_csv.py
 
 import sys
 import subprocess
 from typing import List
+from os import listdir
+from os.path import isfile, join, getsize
 
 total_items = []
 
 def main(directories: List[int]):
-    print(directories)
 
     for directory in directories:
         if 'unpacked' in directory: getData(directory, False)
         else:                       getData(directory, True)
 
 def getData(directory: str, packed: bool = False):
-    # get file name
-    files = []
 
+    # get file name
+    files = [file for file in listdir(directory) if isfile(join(directory, file))]
+    paths = [join(directory, file) for file in files]
+    
     # get file size
+    sizes = [getsize(path) for path in paths]
 
     # get entropy (TODO: get output from entropy calls)
-    executable_path = '../target/entropy'
+    command_path = '../target/entropy'
     try:
-        for file in files:
+        for path in paths:
             subprocess.run(
-                [executable_path, file],
+                [command_path, path],
                 timeout=5,
                 check=True
             )
@@ -36,11 +41,13 @@ def getData(directory: str, packed: bool = False):
     except subprocess.TimeoutExpired as e:
         print(f"Process timed out.\n{e}")
 
-
-
+    for (file, size) in zip(files, sizes):
+        print(f"file: {file}\tsize: {size}")
 
     # push {$name, $size, $entropy, $packed} to total_items 
 
 if __name__ == '__main__':
-    print("hey", sys.argv)
-    main(sys.argv[1:])
+
+    args = sys.argv.copy()
+    args.pop(0)
+    main(args)

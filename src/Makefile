@@ -1,13 +1,15 @@
 CC = gcc
 FLAGS = -lm
+TARGET=../target
 
-all: a.out
+all: entropy
 
-a.out: test.o reader.o
-	$(CC) $^ $(FLAGS)
+entropy: test.o reader.o
+	mkdir -p $(TARGET)
+	$(CC) $^ $(FLAGS) -o $(TARGET)/entropy
 	
 test.o: test.c reader.h
-reader.o: reader.c reader.h
+reader.o: reader.c reader.h	
 
-clean: 
-	rm -f $(wildcard *.out *.o)
+clean:
+	rm -f $(wildcard *.out *.o $(TARGET)/entropy)

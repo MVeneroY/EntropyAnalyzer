@@ -1,8 +1,9 @@
 # .gitignore
 .vscode 
 
-# target files
+# target files and directories
 *.out
+target/
 
 # intermediate object files (?)
 *.o
