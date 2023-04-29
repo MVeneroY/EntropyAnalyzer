@@ -2,8 +2,11 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 static unsigned int bins[0xFF];
+extern int verbose;
 
 // Maybe: combine readExecutable() and placeDataInBins() into one function
 // input: file pointer

@@ -1,5 +1,7 @@
 #include "reader.h"
 
+int verbose = 0;
+
 int getFileSize(FILE * fptr) {
     fseek(fptr, 0, SEEK_END);
     int size = ftell(fptr);
@@ -9,7 +11,7 @@ int getFileSize(FILE * fptr) {
 }
 
 void readExecutable(FILE * fptr, unsigned char * buffer, int bufferlen) {
-    printf("Size of file: %d bytes\n", bufferlen);
+    if (verbose) printf("Size of file: %d bytes\n", bufferlen);
     fread(buffer, bufferlen, 1, fptr);
 }
 
@@ -29,5 +31,6 @@ void getEntropy(int bufferlen) {
         entropy -= p * log(p) / log(0xFF);
     }
 
-    printf("entropy: %f\n", entropy);
+    if (verbose) printf("entropy: %f\n", entropy);
+    else printf("%f\n", entropy);
 }
