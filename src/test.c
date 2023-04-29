@@ -13,7 +13,7 @@ int main(int argc, char ** args) {
     if (fptr == NULL) {
         printf("Error: couldn't open file\n");
         exit(1);
-    }
+    } else if (verbose) printf("file path: %s\n", path);
 
     int bufferlen = getFileSize(fptr);
 
