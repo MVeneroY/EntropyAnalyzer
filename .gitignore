@@ -5,7 +5,7 @@
 *.out
 target/
 
-# intermediate object files (?)
+# intermediate object files
 *.o
 
 # samples

@@ -6,7 +6,9 @@ import subprocess
 from typing import List
 from os import listdir
 from os.path import isfile, join, getsize
+import csv
 
+# fields = ['file_name', 'file_size', 'entropy', 'packed']
 total_items = []
 
 def main(directories: List[int]):
@@ -14,6 +16,8 @@ def main(directories: List[int]):
     for directory in directories:
         if 'unpacked' in directory: getData(directory, False)
         else:                       getData(directory, True)
+
+        writeToCSV()
 
 def getData(directory: str, packed: bool = False):
 
@@ -26,13 +30,19 @@ def getData(directory: str, packed: bool = False):
 
     # get entropy (TODO: get output from entropy calls)
     command_path = '../target/entropy'
+    entropies = []
     try:
         for path in paths:
-            subprocess.run(
-                [command_path, path],
-                timeout=5,
-                check=True
+            entropy = float(
+                subprocess.run(
+                    [command_path, path],
+                    timeout=5,
+                    check=True,
+                    capture_output=True
+                ).stdout
             )
+            entropies.append(entropy)
+
     except FileNotFoundError as e:
         print(f"Process failed because executable was not found. Make sure you provide a working file path\n{e}.")
     except subprocess.CalledProcessError as e:
@@ -41,10 +51,18 @@ def getData(directory: str, packed: bool = False):
     except subprocess.TimeoutExpired as e:
         print(f"Process timed out.\n{e}")
 
-    for (file, size) in zip(files, sizes):
-        print(f"file: {file}\tsize: {size}")
+    for (file, size, entropy) in zip(files, sizes, entropies):
+        total_items.append({'file_name': file, 
+                            'file_size': size,
+                            'entropy': entropy,
+                            'packed': packed
+                            })
 
-    # push {$name, $size, $entropy, $packed} to total_items 
+def writeToCSV():
+    with open('../samples/data.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=total_items[0].keys())
+        writer.writeheader()
+        writer.writerows(total_items)
 
 if __name__ == '__main__':
 
