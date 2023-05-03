@@ -1,4 +1,4 @@
-#! /usr/local/bin/python3
+#! /usr/bin/python3
 # populate_csv.py
 
 import sys
@@ -17,7 +17,7 @@ def main(directories: List[int]):
         if 'unpacked' in directory: getData(directory, False)
         else:                       getData(directory, True)
 
-        writeToCSV()
+    writeToCSV()
 
 def getData(directory: str, packed: bool = False):
 
@@ -59,6 +59,7 @@ def getData(directory: str, packed: bool = False):
                             })
 
 def writeToCSV():
+    print(len(total_items))
     with open('../samples/data.csv', 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=total_items[0].keys())
         writer.writeheader()
